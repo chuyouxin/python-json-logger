@@ -100,7 +100,8 @@ class JsonFormatter(logging.Formatter):
         Override this method to implement custom logic for adding fields.
         """
         for field in self._required_fields:
-            log_record[field] = record.__dict__.get(field)
+            (field, alias) = field.split(":") if ":" in field else (field, field)
+            log_record[alias] = record.__dict__.get(field)
         log_record.update(message_dict)
         merge_record_extra(record, log_record, reserved=self._skip_fields)
 
